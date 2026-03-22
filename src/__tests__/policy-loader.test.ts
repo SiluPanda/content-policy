@@ -392,4 +392,32 @@ describe('loadPolicy', () => {
       expect(policy.rules[0].enabled).toBe(false);
     });
   });
+
+  describe('YAML flow mapping with nested structures', () => {
+    it('should parse YAML flow mapping containing a nested array', () => {
+      const yaml = `
+name: test-policy
+rules:
+  - id: r1
+    type: deny-keyword
+    keywords: [bad, evil]
+    condition: {keywords: [trigger, alert], minLength: 10}
+`;
+      const policy = loadPolicy(yaml);
+      expect(policy.rules[0].condition?.keywords).toEqual(['trigger', 'alert']);
+      expect(policy.rules[0].condition?.minLength).toBe(10);
+    });
+
+    it('should parse YAML with flow sequence inside flow mapping', () => {
+      const yaml = `
+name: test-flow
+rules:
+  - id: r1
+    type: require-keyword
+    keywords: [hello, world]
+`;
+      const policy = loadPolicy(yaml);
+      expect(policy.rules[0].params.keywords).toEqual(['hello', 'world']);
+    });
+  });
 });
