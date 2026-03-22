@@ -342,10 +342,45 @@ function parseFlowMapping(str: string): Record<string, unknown> {
   if (inner === '') return {};
 
   const result: Record<string, unknown> = {};
-  const pairs = inner.split(',');
+
+  // Split by commas respecting nesting depth and quotes
+  const pairs: string[] = [];
+  let current = '';
+  let depth = 0;
+  let inSingleQuote = false;
+  let inDoubleQuote = false;
+
+  for (let i = 0; i < inner.length; i++) {
+    const ch = inner[i];
+    if (ch === "'" && !inDoubleQuote) {
+      inSingleQuote = !inSingleQuote;
+      current += ch;
+    } else if (ch === '"' && !inSingleQuote) {
+      inDoubleQuote = !inDoubleQuote;
+      current += ch;
+    } else if (!inSingleQuote && !inDoubleQuote) {
+      if (ch === '[' || ch === '{') {
+        depth++;
+        current += ch;
+      } else if (ch === ']' || ch === '}') {
+        depth--;
+        current += ch;
+      } else if (ch === ',' && depth === 0) {
+        pairs.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    } else {
+      current += ch;
+    }
+  }
+  if (current.trim()) {
+    pairs.push(current.trim());
+  }
 
   for (const pair of pairs) {
-    const colonIdx = pair.indexOf(':');
+    const colonIdx = findUnquotedColon(pair);
     if (colonIdx === -1) continue;
     const key = pair.substring(0, colonIdx).trim();
     const value = pair.substring(colonIdx + 1).trim();
