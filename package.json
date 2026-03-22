@@ -1,6 +1,6 @@
 {
   "name": "content-policy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Declarative business-rule content policy engine for LLMs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

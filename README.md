@@ -3,6 +3,7 @@
 Declarative business-rule content policy engine for LLM input and output.
 
 [![npm version](https://img.shields.io/npm/v/content-policy.svg)](https://www.npmjs.com/package/content-policy)
+[![npm downloads](https://img.shields.io/npm/dt/content-policy.svg)](https://www.npmjs.com/package/content-policy)
 [![license](https://img.shields.io/npm/l/content-policy.svg)](https://github.com/SiluPanda/content-policy/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/content-policy.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue.svg)](https://www.typescriptlang.org/)
